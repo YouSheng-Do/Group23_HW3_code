@@ -29,8 +29,8 @@ def match_features(img1, img2, descriptors1, descriptors2, keypoints1, keypoints
 # Step 3: 使用 RANSAC 找到單應矩陣 H
 def find_homography(keypoints1, keypoints2, matches, max_matches=50):
     good_matches = matches[:max_matches]  # 選取前 max_matches 個匹配點
-    src_pts = np.float32([keypoints1[m.queryIdx].pt for m in good_matches]).reshape(-1, 1, 2)
-    dst_pts = np.float32([keypoints2[m.trainIdx].pt for m in good_matches]).reshape(-1, 1, 2)
+    src_pts = np.float32([keypoints1[m[0]].pt for m in good_matches]).reshape(-1, 1, 2)
+    dst_pts = np.float32([keypoints2[m[1]].pt for m in good_matches]).reshape(-1, 1, 2)
     
     H, mask = cv2.findHomography(src_pts, dst_pts, cv2.RANSAC, 5.0)
     
