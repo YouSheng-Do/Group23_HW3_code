@@ -4,12 +4,7 @@ import numpy as np
 # Step 1 - 2: Interest points detection by MSER & feature description by SIFT
 def detect_and_describe_mser(img, img_name="Image"):
     mser = cv2.MSER_create()
-    regions, _ = mser.detectRegions(img)
-    
-    keypoints = []
-    for region in regions:
-        center = np.mean(region, axis=0)
-        keypoints.append(cv2.KeyPoint(x=center[0], y=center[1], size=3))
+    keypoints = mser.detect(img)
     
     sift = cv2.SIFT_create()
     keypoints, descriptors = sift.compute(img, keypoints)
