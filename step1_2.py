@@ -1,6 +1,30 @@
 import cv2
 import numpy as np
 
+def detect_and_describe_mser(img, img_name="Image"):
+    # MSER 檢測器
+    mser = cv2.MSER_create()
+    regions, _ = mser.detectRegions(img)
+    
+    # 檢測到的 MSER 區域轉換為特徵點格式
+    keypoints = []
+    for region in regions:
+        # 計算區域的中心點
+        center = np.mean(region, axis=0)
+        # 可以根據需要調整 size
+        keypoints.append(cv2.KeyPoint(x=center[0], y=center[1], size=3))
+    
+    # SIFT 描述符
+    sift = cv2.SIFT_create()
+    keypoints, descriptors = sift.compute(img, keypoints)
+    
+    # 顯示 MSER 檢測的特徵點
+    img_with_keypoints = cv2.drawKeypoints(img, keypoints, None, flags=cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
+    cv2.imshow(f"{img_name} - MSER Keypoints", img_with_keypoints)
+    cv2.waitKey(0)
+    
+    return keypoints, descriptors
+
 # Step 1: Interest points detection & feature description by SIFT
 def detect_and_describe(img, img_name="Image"):
     sift = cv2.SIFT_create()
