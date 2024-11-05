@@ -1,6 +1,5 @@
 import cv2
 import numpy as np
-# from utils import find_homography
 from step1_2 import detect_and_describe, match_features
 from step3 import homomat
 from step4 import warp
