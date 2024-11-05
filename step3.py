@@ -1,7 +1,4 @@
-import cv2
 import numpy as np
-from utils import warp_and_stitch
-from step1_2 import detect_and_describe, detect_and_describe_mser, match_features
 
 def compute_homography(src_pts, dst_pts):
     A = []
@@ -19,16 +16,15 @@ def compute_homography(src_pts, dst_pts):
     H = H / H[2,2] # makes H[2,2] one
     return H
 
-def homomat(keypoints1, keypoints2, matches, max_matches=50, S=4, threshold=1.0, K=1000):
-    good_matches = matches[:max_matches]  # 選取前 max_matches 個匹配點
-    src_pts = np.float32([keypoints1[m[0]].pt for m in good_matches]).reshape(-1, 2)
-    dst_pts = np.float32([keypoints2[m[1]].pt for m in good_matches]).reshape(-1, 2)
+def homomat(keypoints1, keypoints2, matches, S=4, threshold=1.0, K=1000):
+    src_pts = np.float32([keypoints1[m[0]].pt for m in matches]).reshape(-1, 2)
+    dst_pts = np.float32([keypoints2[m[1]].pt for m in matches]).reshape(-1, 2)
 
     max_inliers = 0
     best_inliers = None
     best_H = None
     
-    # 開始迭代
+    # Start iteration process
     for _ in range(K):
         n_points = src_pts.shape[0]
 
@@ -56,41 +52,6 @@ def homomat(keypoints1, keypoints2, matches, max_matches=50, S=4, threshold=1.0,
     if best_inliers is not None:
         best_H = compute_homography(src_pts[best_inliers], dst_pts[best_inliers])
     
-    # 顯示成功找到的單應矩陣 H
+    # Print the best Homography matrix H
     print("Homography Matrix H:\n", best_H)
     return best_H
-
-def stitch_images(img1, img2):
-    # 1. Interest points detection & feature description by SIFT
-    keypoints1, descriptors1 = detect_and_describe(img1, "Image 1")
-    keypoints2, descriptors2 = detect_and_describe(img2, "Image 2")
-    # # 1. Use mser method
-    # keypoints1, descriptors1 = detect_and_describe_mser(img1, "Image 1")
-    # keypoints2, descriptors2 = detect_and_describe_mser(img2, "Image 2")
-    
-    # 2. Feature matching by SIFT features
-    matches = match_features(img1, img2, descriptors1, descriptors2, keypoints1, keypoints2)
-    
-    for th in [0.5, 1.0]:
-        for s in [4]:
-            # 3. RANSAC to find homography matrix H
-            H = homomat(keypoints1, keypoints2, matches, S=s, threshold=th)
-            
-            # 4. Warp image to create panoramic image
-            result = warp_and_stitch(img1, img2, H)
-    
-    return result
-
-if __name__ == '__main__':
-    img1 = cv2.imread('data/S1.jpg')
-    img2 = cv2.imread('data/S2.jpg')
-    result = stitch_images(img1, img2)
-    cv2.destroyAllWindows()
-    img1 = cv2.imread('data/TV1.jpg')
-    img2 = cv2.imread('data/TV2.jpg')
-    result = stitch_images(img1, img2)
-    cv2.destroyAllWindows()
-    img1 = cv2.imread('data/hill1.JPG')
-    img2 = cv2.imread('data/hill2.JPG')
-    result = stitch_images(img1, img2)
-    cv2.destroyAllWindows()

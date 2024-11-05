@@ -1,5 +1,4 @@
 import cv2
-import numpy as np
 from step1_2 import detect_and_describe, match_features
 from step3 import homomat
 from step4 import warp
@@ -29,18 +28,22 @@ def stitch_images(img1, img2):
 # cv2.destroyAllWindows()
 
 
-# img1 = cv2.imread('data/S1.jpg')
-# img2 = cv2.imread('data/S2.jpg')
-# result = stitch_images(img1, img2)
-# cv2.imwrite('test.png', result)
-# cv2.destroyAllWindows()
+img1 = cv2.imread('data/S1.jpg')
+img2 = cv2.imread('data/S2.jpg')
+result = stitch_images(img1, img2)
+cv2.imwrite('test_all.png', result)
+
+cv2.imshow('Image', result)
+cv2.waitKey(0)
+
+cv2.destroyAllWindows()
 # img1 = cv2.imread('data/TV1.jpg')
 # img2 = cv2.imread('data/TV2.jpg')
 # result = stitch_images(img1, img2)
 # cv2.imwrite('test.png', result)
 # cv2.destroyAllWindows()
-img1 = cv2.imread('data/hill1.JPG')
-img2 = cv2.imread('data/hill2.JPG')
-result = stitch_images(img1, img2)
-cv2.imwrite('test.png', result)
-cv2.destroyAllWindows()
+# img1 = cv2.imread('data/hill1.JPG')
+# img2 = cv2.imread('data/hill2.JPG')
+# result = stitch_images(img1, img2)
+# cv2.imwrite('test.png', result)
+# cv2.destroyAllWindows()

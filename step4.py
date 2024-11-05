@@ -1,5 +1,4 @@
 import numpy as np
-import cv2
 
 def warp(img1, img2, H):
     h1, w1 = img1.shape[:2]
@@ -35,6 +34,3 @@ def warp(img1, img2, H):
             stitch_img[i, j] = alpha * stitch_img[i, j] + (1 - alpha) * img1[i, j]
 
     return stitch_img
-
-    # cv2.imshow('Image', stitch_img)
-    # cv2.waitKey(0)

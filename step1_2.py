@@ -40,7 +40,7 @@ def match_features(img1, img2, descriptors1, descriptors2, keypoints1, keypoints
     img_matches = np.hstack((img1, img2))
     h1, w1 = img1.shape[:2]
     
-    for idx1, idx2 in matches[:50]:
+    for idx1, idx2 in matches[:]:
         pt1 = tuple(np.round(keypoints1[idx1].pt).astype(int))
         pt2 = tuple(np.round(keypoints2[idx2].pt).astype(int) + np.array([w1, 0]))
         color = tuple(np.random.randint(0, 255, 3).tolist())
