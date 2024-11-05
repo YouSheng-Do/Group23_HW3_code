@@ -11,6 +11,7 @@ def detect_and_describe_mser(img, img_name="Image"):
     
     img_with_keypoints = cv2.drawKeypoints(img, keypoints, None, flags=cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
     cv2.imshow(f"{img_name} - MSER Keypoints", img_with_keypoints)
+    cv2.imwrite(f"./output/{img_name} - MSER Keypoints.png", img_with_keypoints)
     cv2.waitKey(0)
     
     return keypoints, descriptors
@@ -22,12 +23,13 @@ def detect_and_describe(img, img_name="Image"):
     img_with_keypoints = cv2.drawKeypoints(img, keypoints, None, flags=cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
     
     cv2.imshow(f"{img_name} - Keypoints", img_with_keypoints)
+    cv2.imwrite(f"./output/{img_name} - Keypoints.png", img_with_keypoints)
     cv2.waitKey(0)
     
     return keypoints, descriptors
 
 # Step 2: Feature matching by SIFT features
-def match_features(img1, img2, descriptors1, descriptors2, keypoints1, keypoints2, ratio=0.75):
+def match_features(img1, img2, descriptors1, descriptors2, keypoints1, keypoints2, output_name, ratio=0.75):
     matches = []
     
     for i, desc1 in enumerate(descriptors1):
@@ -48,7 +50,8 @@ def match_features(img1, img2, descriptors1, descriptors2, keypoints1, keypoints
         cv2.circle(img_matches, pt1, 4, color, 1)
         cv2.circle(img_matches, pt2, 4, color, 1)
     
-    cv2.imshow("Feature Matching (Custom)", img_matches)
+    cv2.imshow(f"{output_name} - Feature Matching", img_matches)
+    cv2.imwrite(f"./output/{output_name} - Feature Matching.png", img_matches)
     cv2.waitKey(0)
     
     return matches
