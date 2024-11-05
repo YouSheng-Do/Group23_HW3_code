@@ -1,6 +1,20 @@
 import cv2
 import numpy as np
 
+# Step 1 - 2: Interest points detection by MSER & feature description by SIFT
+def detect_and_describe_mser(img, img_name="Image"):
+    mser = cv2.MSER_create()
+    keypoints = mser.detect(img)
+    
+    sift = cv2.SIFT_create()
+    keypoints, descriptors = sift.compute(img, keypoints)
+    
+    img_with_keypoints = cv2.drawKeypoints(img, keypoints, None, flags=cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
+    cv2.imshow(f"{img_name} - MSER Keypoints", img_with_keypoints)
+    cv2.waitKey(0)
+    
+    return keypoints, descriptors
+
 # Step 1: Interest points detection & feature description by SIFT
 def detect_and_describe(img, img_name="Image"):
     sift = cv2.SIFT_create()
