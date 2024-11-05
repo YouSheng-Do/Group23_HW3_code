@@ -37,7 +37,10 @@ def match_features(img1, img2, descriptors1, descriptors2, keypoints1, keypoints
         sorted_indices = np.argsort(distances)
         
         if distances[sorted_indices[0]] < ratio * distances[sorted_indices[1]]:
-            matches.append((i, sorted_indices[0]))
+            matches.append((i, sorted_indices[0], distances[sorted_indices[0]]))
+
+    matches = sorted(matches, key=lambda x: x[2])
+    matches = [(i, j) for i, j, _ in matches]
     
     img_matches = np.hstack((img1, img2))
     h1, w1 = img1.shape[:2]

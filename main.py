@@ -20,6 +20,7 @@ def stitch_images(img1, img2, img1_name, img2_name):
     
     return result
 
+
 os.makedirs('output', exist_ok=True)
 input_dir = 'data'
 prefixes = []
@@ -30,6 +31,7 @@ for filename in os.listdir(input_dir):
         prefixes.append(prefix)
 
 for prefix in prefixes:
+    print(prefix)
     input1_path = os.path.join(input_dir, f'{prefix}1.jpg')
     img1 = cv2.imread(input1_path)
     img1_name = f'{prefix}1'

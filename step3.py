@@ -16,7 +16,7 @@ def compute_homography(src_pts, dst_pts):
     H = H / H[2,2] # makes H[2,2] one
     return H
 
-def homomat(keypoints1, keypoints2, matches, S=4, threshold=1.0, K=1000):
+def homomat(keypoints1, keypoints2, matches, S=4, threshold=5.0, K=1000):
     src_pts = np.float32([keypoints1[m[0]].pt for m in matches]).reshape(-1, 2)
     dst_pts = np.float32([keypoints2[m[1]].pt for m in matches]).reshape(-1, 2)
 
