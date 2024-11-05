@@ -34,13 +34,14 @@ def find_homography(keypoints1, keypoints2, matches, max_matches=50):
     for _ in range(K):
         n_points = src_pts.shape[0]
 
-        idx = np.random.choice(src_pts.shape[0], 4, replace=False)
-        H = compute_homography(src_pts[idx], dst_pts[idx])
+        idxs = np.random.choice(src_pts.shape[0], 4, replace=False)
+        H = compute_homography(src_pts[idxs], dst_pts[idxs])
 
         # Compute inliers
         src_pts_h = np.concatenate((src_pts, np.ones((n_points, 1))), axis=1)
         projected_pts = (H @ src_pts_h.T).T
-        projected_pts = projected_pts[:, :2] / projected_pts[:, 2, np.newaxis]
+        projected_pts = np.array([[pts[0]/pts[2], pts[1]/pts[2]] for pts in projected_pts])
+
         
         # Compute distances to dst_pts
         distances = np.linalg.norm(projected_pts - dst_pts, axis=1)
